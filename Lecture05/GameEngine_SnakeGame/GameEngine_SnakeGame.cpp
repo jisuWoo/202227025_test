@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <Windows.h>
 
@@ -6,7 +6,7 @@
 int print_title_screen() {
 
 
-	std::cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
+	std::cout << "■■■■■■■■■■■■■■■■■■■■■" << std::endl;
 	std::cout << "■                                      ■" << std::endl;
 	std::cout << "■                                      ■" << std::endl;
 	std::cout << "■             지렁이 게임              ■" << std::endl;
@@ -17,7 +17,7 @@ int print_title_screen() {
 	std::cout << "■  3. 게임 랭킹 보기                   ■" << std::endl;
 	std::cout << "■  4. 게임 종료 (esc)                  ■" << std::endl;
 	std::cout << "■                                      ■" << std::endl;
-	std::cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
+	std::cout << "■■■■■■■■■■■■■■■■■■■■■" << std::endl;
 
 	return 0;
 
@@ -26,7 +26,7 @@ int print_title_screen() {
 void print_game_screen(char** map, int stage_width, int stage_height);
 
 int InitMap(int stage_width, int stage_height) {
-
+	
 	char** map = (char**)malloc(sizeof(char*) * (stage_height + 2));
 	for (int i = 0; i < stage_height + 2; i++) {
 		map[i] = (char*)malloc(sizeof(char) * (stage_width + 2));
@@ -51,15 +51,15 @@ int InitMap(int stage_width, int stage_height) {
 
 void gotoxy(int x, int y) {
 	//x, y 좌표 설정
-	COORD pos = { x*2 , y }; // 세로랑 가로와 격차가 있어 곱하기추가
+	COORD pos = { x * 2 , y }; // 세로랑 가로와 격차가 있어 곱하기추가
 	//커서 이동
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
 void print_game_screen(char** map, int stage_width, int stage_height)
 {
-	for (int i = 0; i < stage_height+2; i++) {
-		for (int j = 0; j < stage_width+2; j++) {
+	for (int i = 0; i < stage_height + 2; i++) {
+		for (int j = 0; j < stage_width + 2; j++) {
 			gotoxy(j, i);
 			printf("%c", map[i][j]);
 		}
@@ -69,10 +69,10 @@ void print_game_screen(char** map, int stage_width, int stage_height)
 //game state == 2
 int print_introduction_screen() {
 
-	std::cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
+	std::cout << "■■■■■■■■■■■■■■■■■■■■" << std::endl;
 	std::cout << "■          게임 설명화면입니다.      ■" << std::endl;
 	std::cout << "■ Snake bite란... 인터넷에...        ■" << std::endl;
-	std::cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
+	std::cout << "■■■■■■■■■■■■■■■■■■■■" << std::endl;
 	std::cout << "■   타이틀화면으로 돌아갈까요? (Y/N) ■" << std::endl;
 
 	return 0;
@@ -90,82 +90,82 @@ int main() {
 
 	int game_state = 1;
 	int mod_refresh = 0;
+	int sub_title_state = 1;
 
 	while (game_state) {
-		
-		char key_input = 0;
-		int sub_title_state = 1;
-		switch (game_state) 
-		{
-			case 0:
-				game_state = 0;
-				break;
-			case 1:
-				while (sub_title_state) {
-					print_title_screen();
-					key_input = _getch();
-					switch (key_input)
-					{
-						case '0':
-							sub_title_state = 0;
-							game_state = 0;
-							break;
-						case '1':
-							sub_title_state = 0;
-							game_state = 1;
-							mod_refresh = 1;
-							break;
-						case '2':
-							sub_title_state = 0;
-							game_state = 2;
-							break;
-						case '3':
-							//game_state = 3;
-							break;
-						case '4':
-							sub_title_state = 0;
-							game_state = 0;
-							break;
-						case 27:
-							sub_title_state = 0;
-							game_state = 0;
-							break;
-						default:
-							break;
-					}
-				}
-				if (mod_refresh) {
-						int stage_width,stage_height;
-						std::cout << "■맵을 만들기 위해 x,y값을 입력해주세요!■" << std::endl;
-						std::cout << "■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■" << std::endl;
-						scanf_s("%d", &stage_width);
-						scanf_s("%d", &stage_height);
-						system("cls");
-						InitMap(stage_width,stage_height);
-						mod_refresh = 0;
-				};
-				mod_refresh = 1;
-				break;
-			case 2:
-				if (mod_refresh) 
-				{
-						print_introduction_screen();
-				}
-				key_input = _getch();
-				
-				mod_refresh = 0;
 
-				if (key_input == 'y') {
+		char key_input = 0;
+		switch (game_state)
+		{
+		case 0:
+			game_state = 0;
+			break;
+		case 1:
+			while (sub_title_state) 
+			{
+				print_title_screen();
+				key_input = _getch();
+				switch (key_input)
+				{
+				case '0':
+					sub_title_state = 0;
+					game_state = 0;
+					break;
+				case '1':
+					sub_title_state = 0;
 					game_state = 1;
-					sub_title_state = 1;
+					mod_refresh = 1;
+					break;
+				case '2':
+					sub_title_state = 0;
+					game_state = 2;
+					break;
+				case '3':
+					//game_state = 3;
+					break;
+				case '4':
+					sub_title_state = 0;
+					game_state = 0;
+					break;
+				case 27:
+					sub_title_state = 0;
+					game_state = 0;
+					break;
+				default:
+					break;
 				}
-				else if (key_input == 'n') {					
-				}
-				break;
-			case 3:
-				break;
-			default:
-				break;
+			}
+			if (mod_refresh) {
+				int stage_width, stage_height;
+				std::cout << "■맵을 만들기 위해 x,y값을 입력해주세요!■" << std::endl;
+				std::cout << "■■■■■■■■■■■■■■■■■■■■■" << std::endl;
+				scanf_s("%d", &stage_width);
+				scanf_s("%d", &stage_height);
+				system("cls");
+				InitMap(stage_width, stage_height);
+				mod_refresh = 0;
+			};
+			break;
+		case 2:
+			if (mod_refresh)
+			{
+				print_introduction_screen();
+			}
+			key_input = _getch();
+
+			mod_refresh = 0;
+
+			if (key_input == 'y') {
+				game_state = 1;
+				sub_title_state = 1;
+			}
+			else if (key_input == 'n') {
+			}
+			break;
+		case 3:
+			break;
+		default:
+			break;
 		}
 
 	}
