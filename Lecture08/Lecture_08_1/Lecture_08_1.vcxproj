@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{016d6bfe-7872-4e2a-b3d5-405cc8f62964}</ProjectGuid>
+    <ProjectGuid>{d766c380-00d4-4157-bba5-2412931e71ec}</ProjectGuid>
     <RootNamespace>Lecture081</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Lecture08_1.cpp" />
+    <ClCompile Include="Lecture_08_1.cpp" />
     <ClCompile Include="MGameLoop.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
