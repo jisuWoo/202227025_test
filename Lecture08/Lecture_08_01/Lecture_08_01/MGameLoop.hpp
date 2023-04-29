@@ -19,9 +19,9 @@
 namespace MuSoeun
 {
 	void gotoxy(int x, int y) {
-		//x, y ÁÂÇ¥ ¼³Á¤
+		//x, y ì¢Œí‘œ ì„¤ì •
 		COORD pos = { x,y };
-		//Ä¿¼­ ÀÌµ¿
+		//ì»¤ì„œ ì´ë™
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 	}
 
@@ -47,18 +47,18 @@ namespace MuSoeun
 			SetCursorState(false);
 
 			gotoxy(3, 15);
-			std::cout << ANSI_COLOR_RESET"°ÔÀÓ ÃÊ±âÈ­Áß" << std::endl;
+			std::cout << ANSI_COLOR_RESET"ê²Œì„ ì´ˆê¸°í™”ì¤‘" << std::endl;
 			isGameRunning = true;
 		}
 		void Release()
 		{
 			gotoxy(3, 18);
-			std::cout << ANSI_COLOR_RESET"°ÔÀÓ Á¾·áÁß" << std::endl;
+			std::cout << ANSI_COLOR_RESET"ê²Œì„ ì¢…ë£Œì¤‘" << std::endl;
 		}
 		void Update()
 		{
 			gotoxy(3, 16);
-			std::cout << ANSI_COLOR_RESET"°ÔÀÓ Å°ÀÔ·Â ´ë±â" << std::endl;
+			std::cout << ANSI_COLOR_RESET"ê²Œì„ í‚¤ì…ë ¥ ëŒ€ê¸°" << std::endl;
 			if (_kbhit())
 			{
 				KeyEvent(_getch());
@@ -67,27 +67,27 @@ namespace MuSoeun
 		void Render()
 		{
 			gotoxy(3, 17);
-			std::cout << ANSI_COLOR_RESET"°ÔÀÓ È­¸é ±×¸®±â" << std::endl;
+			std::cout << ANSI_COLOR_RESET"ê²Œì„ í™”ë©´ ê·¸ë¦¬ê¸°" << std::endl;
 		}
 		void RenderRest()
 		{
 			gotoxy(3, 20);
-			std::cout << "                      " << std::endl;
+			std::cout << "                                " << std::endl;
 			gotoxy(3, 22);
-			std::cout << "          " << std::endl;
+			std::cout << "                                " << std::endl;
 			gotoxy(7, 22);
-			std::cout << "          " << std::endl;
+			std::cout << "                                " << std::endl;
 		}
 
 		void isGameover() {
 			bool isSelectedL = false;
 			bool isSelectedR = false;
 			gotoxy(3, 20);
-			std::cout << "Á¾·á ÇÏ½Ã°Ú½À´Ï±î?  " << std::endl;
+			std::cout << "ì¢…ë£Œ í•˜ì‹œê² ìŠµë‹ˆê¹Œ?  " << std::endl;
 			gotoxy(3, 22);
-			std::cout << "¿¹  " << std::endl;
-			gotoxy(7, 22);
-			std::cout << "¾Æ´Ï¿À  " << std::endl;
+			std::cout << "[  ì˜ˆ  ]  " << std::endl;
+			gotoxy(15, 22);
+			std::cout << "[ì•„ë‹ˆì˜¤]  " << std::endl;
 			//isGameRunning = false;
 
 			while (isPause) {
@@ -99,12 +99,12 @@ namespace MuSoeun
 					case KEY_LEFT:
 
 						if (isSelectedR) {
-							gotoxy(7, 22);
-							std::cout << ANSI_COLOR_RESET"¾Æ´Ï¿À  " << std::endl;
+							gotoxy(15, 22);
+							std::cout << ANSI_COLOR_RESET"[ì•„ë‹ˆì˜¤]  " << std::endl;
 						}
 						if (isSelectedL == false) {
 							gotoxy(3, 22);
-							std::cout << ANSI_COLOR_YELLOW"¿¹  " << std::endl;
+							std::cout << ANSI_COLOR_YELLOW"[  ì˜ˆ  ]  " << std::endl;
 
 						}
 						isSelectedL = true;
@@ -113,11 +113,11 @@ namespace MuSoeun
 					case KEY_RIGHT:
 						if (isSelectedL) {
 							gotoxy(3, 22);
-							std::cout << ANSI_COLOR_RESET"¿¹  " << std::endl;
+							std::cout << ANSI_COLOR_RESET"[  ì˜ˆ  ]  " << std::endl;
 						}
 						if (isSelectedR == false) {
-							gotoxy(7, 22);
-							std::cout << ANSI_COLOR_YELLOW"¾Æ´Ï¿À " << std::endl;
+							gotoxy(15, 22);
+							std::cout << ANSI_COLOR_YELLOW"[ì•„ë‹ˆì˜¤]  " << std::endl;
 						}
 						isSelectedR = true;
 						isSelectedL = false;
@@ -167,19 +167,19 @@ namespace MuSoeun
 			case KEY_LEFT:
 				if (isPause == false) {
 					gotoxy(5, 5);
-					std::cout << ANSI_COLOR_RED"¿ŞÂÊ ´­¸²  " << std::endl;
+					std::cout << ANSI_COLOR_RED"ì™¼ìª½ ëˆŒë¦¼  " << std::endl;
 				}
 				break;
 			case KEY_RIGHT:
 				if (isPause == false) {
 					gotoxy(5, 5);
-					std::cout << ANSI_COLOR_GREEN"¿À¸¥ÂÊ ´­¸²" << std::endl;
+					std::cout << ANSI_COLOR_GREEN"ì˜¤ë¥¸ìª½ ëˆŒë¦¼" << std::endl;
 				}
 				break;
 			case KEY_ENTER:
 				if (isPause == false) {
 					gotoxy(5, 5);
-					std::cout << ANSI_COLOR_BLUE"¿£ÅÍ ´­¸²  " << std::endl;
+					std::cout << ANSI_COLOR_BLUE"ì—”í„° ëˆŒë¦¼  " << std::endl;
 				}
 				break;
 			default:
