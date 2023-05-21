@@ -4,7 +4,7 @@
 ExitProcess PROTO, dwExitCode: DWORD
 INCLUDE Irvine32.inc
 
-.data
+.data ;이 코드는 스네이크 게임을 어셈블리어로 짠 깃헙코드를 가져온 것으로, 참고용으로 쓸 예정입니다.
 
 xWall BYTE 52 DUP("#"),0
 
@@ -22,13 +22,13 @@ snake BYTE "X", 104 DUP("x")
 xPos BYTE 45,44,43,42,41, 100 DUP(?)
 yPos BYTE 15,15,15,15,15, 100 DUP(?)
 
-xPosWall BYTE 34,34,85,85			;position of upperLeft, lowerLeft, upperRight, lowerRignt wall 
+xPosWall BYTE 34,34,85,85			;위,아래,오른쪽,왼쪽 벽 
 yPosWall BYTE 5,24,5,24
 
 xCoinPos BYTE ?
 yCoinPos BYTE ?
 
-inputChar BYTE "+"					; + denotes the start of the game
+inputChar BYTE "+"					; 시작
 lastInputChar BYTE ?				
 
 strSpeed BYTE "Speed (1-fast, 2-medium, 3-slow): ",0
@@ -36,37 +36,37 @@ speed	DWORD 0
 
 .code
 main PROC
-	call DrawWall			;draw walls
-	call DrawScoreboard		;draw scoreboard
-	call ChooseSpeed		;let player to choose Speed
+	call DrawWall			;벽을 그림
+	call DrawScoreboard		;점수표를 그림
+	call ChooseSpeed		;유저가 속도를 선택하게 함
 
 	mov esi,0
 	mov ecx,5
 drawSnake:
-	call DrawPlayer			;draw snake(start with 5 units)
+	call DrawPlayer			;뱀을 그림 5개로 
 	inc esi
 loop drawSnake
 
 	call Randomize
 	call CreateRandomCoin
-	call DrawCoin			;set up finish
+	call DrawCoin			;마무리 코인
 
 	gameLoop::
-		mov dl,106						;move cursor to coordinates
+		mov dl,106						;커서를 움직임
 		mov dh,1
 		call Gotoxy
 
 		; get user key input
 		call ReadKey
-        jz noKey						;jump if no key is entered
+        jz noKey						;키입력이 없을 시
 		processInput:
 		mov bl, inputChar
 		mov lastInputChar, bl
-		mov inputChar,al				;assign variables
+		mov inputChar,al				;변수 지정
 
 		noKey:
 		cmp inputChar,"x"	
-		je exitgame						;exit game if user input x
+		je exitgame						;유저 입력으로 나감
 
 		cmp inputChar,"w"
 		je checkTop
@@ -79,18 +79,18 @@ loop drawSnake
 
 		cmp inputChar,"d"
 		je checkRight
-		jne gameLoop					; reloop if no meaningful key was entered
+		jne gameLoop					; 다시 루프
 
 
 		; check whether can continue moving
 		checkBottom:	
 		cmp lastInputChar, "w"
-		je dontChgDirection		;cant go down immediately after going up
+		je dontChgDirection		;즉시 방향 전환
 		mov cl, yPosWall[1]
-		dec cl					;one unit ubove the y-coordinate of the lower bound
+		dec cl					
 		cmp yPos[0],cl
 		jl moveDown
-		je died					;die if crash into the wall
+		je died					;벽에 부딪 칠시 죽음
 
 		checkLeft:		
 		cmp lastInputChar, "+"	;check whether its the start of the game
@@ -101,7 +101,7 @@ loop drawSnake
 		inc cl
 		cmp xPos[0],cl
 		jg moveLeft
-		je died					; check for left	
+		je died					; 오른쪽 체크	
 
 		checkRight:		
 		cmp lastInputChar, "a"
@@ -110,7 +110,7 @@ loop drawSnake
 		dec cl
 		cmp xPos[0],cl
 		jl moveRight
-		je died					; check for right	
+		je died					; 왼쪽 체크
 
 		checkTop:		
 		cmp lastInputChar, "s"
@@ -119,10 +119,10 @@ loop drawSnake
 		inc cl
 		cmp yPos,cl
 		jg moveUp
-		je died				; check for up	
+		je died				; 위 체크
 		
 		moveUp:		
-		mov eax, speed		;slow down the moving
+		mov eax, speed		;천천히 움직이게
 		add eax, speed
 		call delay
 		mov esi, 0			;index 0(snake head)
