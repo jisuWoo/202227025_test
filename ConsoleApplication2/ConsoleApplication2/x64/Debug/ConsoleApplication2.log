@@ -1,0 +1,5 @@
+﻿  ConsoleApplication2.cpp
+C:\Users\wjs03\source\repos\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(31,21): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\wjs03\source\repos\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(31,25): warning C4838: 'int'에서 'SHORT'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\wjs03\source\repos\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.cpp(140,12): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+  ConsoleApplication2.vcxproj -> C:\Users\wjs03\source\repos\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe
