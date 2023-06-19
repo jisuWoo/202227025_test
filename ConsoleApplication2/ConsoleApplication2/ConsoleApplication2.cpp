@@ -11,10 +11,14 @@
 #define PAUSE 112
 #define ESC 27
 
-#define MAP_X 1
-#define MAP_Y 1
+#define MAP_X 0
+#define MAP_Y 0
 #define MAP_WIDTH 40
 #define MAP_HEIGHT 20
+
+#define ANSI_COLOR_RED      "\x1b[31m"
+#define ANSI_COLOR_CYAN     "\x1b[36m"
+#define ANSI_COLOR_RESET    "\x1b[0m"
 
 int x[100], y[100]; //x,y 좌표값을 저장 총 100개 
 int food_x, food_y; //food의 좌표값을 저장 
@@ -41,6 +45,7 @@ void pause(void); //일시정지
 void game_over(void); //게임 오버를 확인 
 void food(void); // 음식 생성 
 void status(void); // 개발자용 status표시  
+void cursor_hide(); //커서 숨김
 
 ////////////////////////////MAIN START//////////////////////////////
 int main() {
@@ -91,7 +96,7 @@ void title(void) {
     }
 
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 5, "+--------------------------+");
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 6, "|        S N A K E         |");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 6, "|    S N A K E  G A M E    |");
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 7, "+--------------------------+");
 
     gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 9, " < PRESS ANY KEY TO START > ");
@@ -130,21 +135,21 @@ void reset(void) {
         y[i] = MAP_HEIGHT / 2;
         gotoxy(MAP_X + x[i], MAP_Y + y[i], "ㅇ");
     }
-    gotoxy(MAP_X + x[0], MAP_Y + y[0], "ㅎ"); //뱀 머리 그림 
+    gotoxy(MAP_X + x[0], MAP_Y + y[0], "O"); //뱀 머리 그림 
     food(); // food 생성  
 }
 
 void draw_map(void) { //맵 테두리 그리는 함수 
     int i, j;
     for (i = 0; i < MAP_WIDTH; i++) {
-        gotoxy(MAP_X + i, MAP_Y, "■");
+        gotoxy(MAP_X + i, MAP_Y, ANSI_COLOR_RESET"■");
     }
     for (i = MAP_Y + 1; i < MAP_Y + MAP_HEIGHT - 1; i++) {
         gotoxy(MAP_X, i, "■");
-        gotoxy(MAP_X + MAP_WIDTH - 1, i, "■");
+        gotoxy(MAP_X + MAP_WIDTH - 1, i, ANSI_COLOR_RESET"■");
     }
     for (i = 0; i < MAP_WIDTH; i++) {
-        gotoxy(MAP_X + i, MAP_Y + MAP_HEIGHT - 1, "■");
+        gotoxy(MAP_X + i, MAP_Y + MAP_HEIGHT - 1, ANSI_COLOR_RESET"■");
     }
 }
 
@@ -175,12 +180,13 @@ void move(int dir) {
         x[i] = x[i - 1];
         y[i] = y[i - 1];
     }
-    gotoxy(MAP_X + x[0], MAP_Y + y[0], "ㅇ"); //머리가 있던곳을 몸통으로 고침 
+    gotoxy(MAP_X + x[0], MAP_Y + y[0], ANSI_COLOR_CYAN"ㅇ"); //머리가 있던곳을 몸통으로 고침 
     if (dir == LEFT) --x[0]; //방향에 따라 새로운 머리좌표(x[0],y[0])값을 변경 
     if (dir == RIGHT) ++x[0];
     if (dir == UP) --y[0];
     if (dir == DOWN) ++y[0];
-    gotoxy(MAP_X + x[i], MAP_Y + y[i], "ㅎ"); //새로운 머리좌표값에 머리를 그림 
+    gotoxy(MAP_X + x[i], MAP_Y + y[i], ANSI_COLOR_CYAN"0"); //새로운 머리좌표값에 머리를 그림 
+    cursor_hide();
 }
 
 void pause(void) { // p키를 눌렀을 경우 게임을 일시 정지 
@@ -206,20 +212,20 @@ void pause(void) { // p키를 눌렀을 경우 게임을 일시 정지
 }
 
 void game_over(void) { //게임종료 함수 
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 5, "+----------------------+");
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 6, "|      GAME OVER..     |");
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, "+----------------------+");
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, " YOUR SCORE : ");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 5, ANSI_COLOR_RESET"+----------------------+");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 6, ANSI_COLOR_RESET"|      GAME OVER..     |");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 7, ANSI_COLOR_RESET"+----------------------+");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 6, MAP_Y + 8, ANSI_COLOR_RESET" YOUR SCORE : ");
     printf("%d", last_score = score);
 
-    gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 12, " Press any keys to restart.. ");
+    gotoxy(MAP_X + (MAP_WIDTH / 2) - 7, MAP_Y + 12, ANSI_COLOR_RESET" Press any keys to restart.. ");
 
     if (score > best_score) {
         best_score = score;
-        gotoxy(MAP_X + (MAP_WIDTH / 2) - 4, MAP_Y + 10, "☆ BEST SCORE ☆");
+        gotoxy(MAP_X + (MAP_WIDTH / 2) - 4, MAP_Y + 10, ANSI_COLOR_RESET"☆ BEST SCORE ☆");
     }
     Sleep(500);
-    while (_kbhit()) _getch();
+    while (_kbhit()) { _getch(); }
     key = _getch();
     title();
 }
@@ -229,8 +235,8 @@ void food(void) {
 
     int food_crush_on = 0;//food가 뱀 몸통좌표에 생길 경우 on 
     int r = 0; //난수 생성에 사동되는 변수 
-    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, " YOUR SCORE: "); //점수표시 
-    printf("%3d, LAST SCORE: %3d, BEST SCORE: %3d", score, last_score, best_score);
+    gotoxy(MAP_X, MAP_Y + MAP_HEIGHT, ANSI_COLOR_RESET" YOUR SCORE: "); //점수표시 
+    printf(ANSI_COLOR_RESET"%3d, LAST SCORE: %3d, BEST SCORE: %3d", score, last_score, best_score);
 
     while (1) {
         food_crush_on = 0;
@@ -248,7 +254,7 @@ void food(void) {
 
         if (food_crush_on == 1) continue; //겹쳤을 경우 while문을 다시 시작 
 
-        gotoxy(MAP_X + food_x, MAP_Y + food_y, "♪"); //안겹쳤을 경우 좌표값에 food를 찍고 
+        gotoxy(MAP_X + food_x, MAP_Y + food_y, ANSI_COLOR_RED"♥"); //안겹쳤을 경우 좌표값에 food를 찍고 
         speed -= 3; //속도 증가 
         break;
 
@@ -268,4 +274,11 @@ void status(void) { //각종 스텟을 볼수 있는 함수
     printf("%3d", speed);
     gotoxy(MAP_X + MAP_WIDTH + 1, MAP_Y + 6, "score= ");
     printf("%3d", score);
+}
+
+void cursor_hide() {
+    CONSOLE_CURSOR_INFO cursorInfo = { 0, };
+    cursorInfo.bVisible = false; // 커서를 보일지 말지 결정(0이면 안보임, 0제외 숫자 값이면 보임)
+    cursorInfo.dwSize = 1; // 커서의 크기를 결정 (1~100 사이만 가능)
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
